@@ -1,83 +1,28 @@
-# ESP8266_IoT package
+# ESP8266 IoT extension for BBC micro:bit MakeCode editor
 
-ESP8266_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
+This extension/package is modified from elecfreaks/pxt-esp8266iot:
+1. The baud rate is set to 115200 instead of 9600. 9600 dosen't seem to work.
+2. Allow user to set ThingSpeak server IP (get it by pinging api.thingspeak.com) if they have DNS problems
 
-This package uploads data to THINGSPEAK IOT through [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
+Works on regular micro:bits without special assoceries, except you'll need a good 3.3V power source.
 
-Before start, you have to register an account of [thingspeak](https://thingspeak.com/).
+You also need a account and a channel on [ThingSpeak](https://thingspeak.com/) to get the write API key.
 
-![](https://github.com/elecfreaks/pxt-esp8266iot/blob/master/ESP8266.png)
+![pctdetail 775-090 1](https://user-images.githubusercontent.com/44191076/50425186-76ada780-08ac-11e9-956c-9ebd6be09bb2.jpg)
+![p1100351](https://user-images.githubusercontent.com/44191076/50425187-77463e00-08ac-11e9-838f-2fa186e7ce2d.jpg)
 
+Connect VCC and CH to 3.3V (sufficint power needed; the power from micro:bit's USB cable is NOT ENOUGH), GND to GND, RX and TX to two I/O pins, ignore the rest. See [here](https://components101.com/wireless/esp8266-pinout-configuration-features-datasheet) for more details.
 
-## Hardware Setup
+![microbit-screenshot](https://user-images.githubusercontent.com/44191076/50425236-5f22ee80-08ad-11e9-977e-9d30a9869439.png)
 
-1. Insert the [OLED display](http://www.elecfreaks.com/estore/iic-oled.html) into the I2C ports on the [ELECFREAKS Octopus:bit](http://www.elecfreaks.com/estore/elecfreaks-micro-bit-breakout-board.html).
+The IP in the pic above is just an example. 
 
-
-## Basic usage
-
-1. Open [Microsoft Makecode/microbit](https://pxt.microbit.org) and create a new project 
-2. Search and add the `ESP8266` package
-3. Use the `ESP8266` drawer in the editor to drag out and arrange the blocks
-4. Click `Download` to move your program to the micro:bit
-
-
-## Example
-
-### set wifi
-Set pin RX and pin TX for ESP8266 Serial Wifi Module, Baud rate: 9600.
-```blocks
-ESP8266_IoT.initwifi(SerialPin.P2, SerialPin.P8)
-```
-
-### connet wifi
-Connectwifi，please fill in your ssid and your key.
-```blocks
-ESP8266_IoT.connectwifi("your ssid", "your key")
-```
-
-### connect thingspeak
-Connect thingspeak IoT TCP server.
-```blocks
-ESP8266_IoT.connectthingspeak()
-```
-
-### set data to be send 
-Set data to be sent. Firstly, you should fill in your write api key.
-```blocks
-ESP8266_IoT.tosendtext(
-"your write api key",
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0
-)
-``` 
-
-### senddata
-Send data to thingspeak.
-```blocks
-ESP8266_IoT.senddata()
-```
-
+If you done everything right you should see the blue LED on ESP8266 blinking every several seconds.
 
 ## License
 
 MIT
 
-
 ## Supported targets
 
 * for PXT/microbit
-(The metadata above is needed for package search.)
-
-```package
-esp8266=github:elecfreaks/pxt-esp8266iot
-```
-
-
-
