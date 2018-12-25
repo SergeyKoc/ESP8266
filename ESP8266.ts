@@ -1,95 +1,78 @@
-
 /**
- * Use this file to define custom functions and blocks.
- * Read more at https://makecode.microbit.org
- */
-
-
-
-/**
- * Custom blocks
+ * MakeCode extension for ESP8266 and ThinkSpeak website, modified from elecfreaks/pxt-esp8266iot
+ * https://thingspeak.com/
  */
 //% color=#0fbc11 icon="\uf1eb" weight=90
-
 namespace ESP8266_IoT {
     let tobesendstring = ""
 
     /**
-     * TODO: Set pin RX and TX for ESP8266 Serial Wifi Module，Baud rate: 9600.
-     * @param wifiRX describe parameter here, eg: SerialPin.P0
-     * @param wifiTX describe parameter here, eg: SerialPin.P1
+     * Set RX and TX pins for ESP8266 serial wifi module
+     * (VCC and CH to 3.3V, GND to GND, RX and TX to two pins, ignore the rest. see
+     * https://components101.com/wireless/esp8266-pinout-configuration-features-datasheet)
      */
     //% weight=100
-    //% blockId="wifi_init" block="set ESP8266 RX %wifiRX| TX %wifiTX|at baud rate 9600"
+    //% blockId="wifi_init" block="Set ESP8266 RX %wifiRX TX %wifiTX at baud rate 115200"
     export function initwifi(wifiRX: SerialPin, wifiTX: SerialPin): void {
         serial.redirect(
             wifiRX,
             wifiTX,
-            BaudRate.BaudRate9600
+            BaudRate.BaudRate115200
         )
         basic.pause(10)
         serial.writeString("AT+CWMODE=1" + "\u000D" + "\u000A")
         basic.pause(5000)
         serial.writeString("AT+RST" + "\u000D" + "\u000A")
         basic.pause(5000)
-        // Add code here
     }
 
     /**
-     * TODO: connectwifi，Fill in your ssid and your key.
+     * Connect to wifi, fill in your ssid and key (password).
      * @param ssid describe parameter here, eg: "your ssid"
      * @param key describe parameter here, eg: "your key"
      */
     //% weight=99
-    //% blockId="wifi_connect" block="connect wifi SSDI: %ssid| KEY: %key"
+    //% blockId="wifi_connect" block="Connect wifi SSDI %ssid KEY %key"
     export function connectwifi(ssid: string, key: string): void {
-        // Add code here
         let text = "AT+CWJAP=\""
-                 + ssid
-                 + "\",\""
-                 + key
-                 + "\""
-        
+            + ssid
+            + "\",\""
+            + key
+            + "\""
         serial.writeString(text + "\u000D" + "\u000A")
         basic.pause(6000)
     }
 
     /**
-     * TODO: connect thingspeak IoT TCP server 
+     * Connect ThingSpeak IoT TCP server
+     * (if you have problem connecting ThingSpeak, try ping api.thingspeak.com
+     * and fill in IP instead)
     */
     //% weight=98
-    //% blockId="TCP_connect" block="connect thingspeak"
-    export function connectthingspeak(): void {
-        // Add code here
-        let text = "AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80"
+    //% blockId="TCP_connect" block="Connect ThingSpeak URL %ip"
+    //% ip.defl=api.thingspeak.com
+    export function connectthingspeak(ip: string): void {
+        let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
         serial.writeString(text + "\u000D" + "\u000A")
         basic.pause(6000)
     }
 
     /**
-     * TODO: Set data to be sent.
-     * @param write_api_key describe parameter here, eg: "your write api key"
-     * @param n1 describe parameter here, eg: 0
-     * @param n2 describe parameter here, eg: 0
-     * @param n3 describe parameter here, eg: 0
-     * @param n4 describe parameter here, eg: 0
-     * @param n5 describe parameter here, eg: 0
-     * @param n6 describe parameter here, eg: 0
-     * @param n7 describe parameter here, eg: 0
-     * @param n8 describe parameter here, eg: 0
+     * Prepare data to be sent
+     * (Get your write API Key on your ThingSpeak channel)
      */
     //% weight=97
-    //% blockId="send_text" block="set data to be send : Write API Key= %write_api_key|field1= %n1|field2= %n2|field3= %n3|field4= %n4|field5= %n5|field6= %n6|field7= %n7|field8= %n8"
+    //% blockId="send_text" block="Set data to be send | write API Key = %write_api_key|Field 1 = %n1|Field 2 = %n2|Field 3 = %n3|Field 4 = %n4|Field 5 = %n5|Field 6 = %n6|Field 7 = %n7|Field 8 = %n8"
     export function tosendtext(write_api_key: string,
-                                n1: number, 
-                                n2: number, 
-                                n3: number, 
-                                n4: number, 
-                                n5: number, 
-                                n6: number, 
-                                n7: number, 
-                                n8: number ): void {
-        let text=""   
+        n1: number,
+        n2: number,
+        n3: number,
+        n4: number,
+        n5: number,
+        n6: number,
+        n7: number,
+        n8: number): void {
+        let text = ""
         text = "GET /update?key="
             + write_api_key
             + "&field1="
@@ -99,7 +82,7 @@ namespace ESP8266_IoT {
             + "&field3="
             + n3
             + "&field4="
-            + n4  
+            + n4
             + "&field5="
             + n5
             + "&field6="
@@ -107,26 +90,23 @@ namespace ESP8266_IoT {
             + "&field7="
             + n7
             + "&field8="
-            + n8  
-        tobesendstring = text              
-        // Add code here
+            + n8
+        tobesendstring = text
     }
 
     /**
-     * TODO: send data
+     * Send data to ThingSpeak
      */
     //% weight=96
-    //% blockId=senddata block="send data to thingspeak"
+    //% blockId=senddata block="Send data to ThingSpeak"
     export function senddata(): void {
         let text = ""
-        text = "AT+CIPSEND=" 
+        text = "AT+CIPSEND="
             + (tobesendstring.length + 2)
         serial.writeString(text + "\u000D" + "\u000A")
         basic.pause(3000)
         serial.writeString(tobesendstring + "\u000D" + "\u000A")
         basic.pause(6000)
-        // Add code here
-
     }
 
 }
