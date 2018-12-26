@@ -7,17 +7,20 @@ namespace ESP8266_IoT {
     let tobesendstring = ""
 
     /**
-     * Set RX and TX pins for ESP8266 serial wifi module
-     * (VCC and CH to 3.3V, GND to GND, RX and TX to two pins, ignore the rest. see
+     * Set RX and TX pins for ESP8266 serial wifi module; baud rate set to 115200, 57600 or 9600 
+     * depending on ESP8266 firmware virsions
+     * (VCC and CH to 3.3V, GND to GND, RX and TX to two pins, ignore the rest. see 
      * https://components101.com/wireless/esp8266-pinout-configuration-features-datasheet)
      */
     //% weight=100
-    //% blockId="wifi_init" block="Set ESP8266 RX %wifiRX TX %wifiTX at baud rate 115200"
-    export function initwifi(wifiRX: SerialPin, wifiTX: SerialPin): void {
+    //% blockId="wifi_init" block="Set ESP8266 RX %wifiRX TX %wifiTX at baud rate %wifiBaudrate"
+    //% wifiRX.defl=SerialPin.P0
+    //% wifiTX.defl=SerialPin.P1
+    export function initwifi(wifiRX: SerialPin, wifiTX: SerialPin, wifiBaudrate: BaudRate): void {
         serial.redirect(
             wifiRX,
             wifiTX,
-            BaudRate.BaudRate115200
+            wifiBaudrate
         )
         basic.pause(10)
         serial.writeString("AT+CWMODE=1" + "\u000D" + "\u000A")
@@ -28,8 +31,6 @@ namespace ESP8266_IoT {
 
     /**
      * Connect to wifi, fill in your ssid and key (password).
-     * @param ssid describe parameter here, eg: "your ssid"
-     * @param key describe parameter here, eg: "your key"
      */
     //% weight=99
     //% blockId="wifi_connect" block="Connect wifi SSDI %ssid KEY %key"
@@ -45,11 +46,11 @@ namespace ESP8266_IoT {
 
     /**
      * Connect ThingSpeak IoT TCP server
-     * (if you have problem connecting ThingSpeak, try ping api.thingspeak.com
-     * and fill in IP instead)
+     * (if you have trouble connecting ThingSpeak, try ping api.thingspeak.com
+     * and use the IP instead)
     */
     //% weight=98
-    //% blockId="TCP_connect" block="Connect ThingSpeak URL %ip"
+    //% blockId="TCP_connect" block="Connect ThingSpeak IP %ip"
     //% ip.defl=api.thingspeak.com
     export function connectthingspeak(ip: string): void {
         let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
