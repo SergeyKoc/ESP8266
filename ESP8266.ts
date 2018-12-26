@@ -4,7 +4,10 @@
  */
 //% color=#0fbc11 icon="\uf1eb" weight=90
 namespace ESP8266_IoT {
+
     let tobesendstring = ""
+    let URL = "api.thingspeak.com"
+    let time = 0
 
     /**
      * Set RX and TX pins for ESP8266 serial wifi module; baud rate set to 115200, 57600 or 9600 
@@ -24,16 +27,16 @@ namespace ESP8266_IoT {
         )
         basic.pause(10)
         serial.writeString("AT+CWMODE=1" + "\u000D" + "\u000A")
-        basic.pause(5000)
+        basic.pause(3000)
         serial.writeString("AT+RST" + "\u000D" + "\u000A")
-        basic.pause(5000)
+        basic.pause(3000)
     }
 
     /**
      * Connect to wifi, fill in your ssid and key (password).
      */
     //% weight=99
-    //% blockId="wifi_connect" block="Connect wifi SSDI %ssid KEY %key"
+    //% blockId="wifi_connect" block="Connect wifi ssid %ssid key %key"
     export function connectwifi(ssid: string, key: string): void {
         let text = "AT+CWJAP=\""
             + ssid
@@ -41,21 +44,20 @@ namespace ESP8266_IoT {
             + key
             + "\""
         serial.writeString(text + "\u000D" + "\u000A")
-        basic.pause(6000)
+        basic.pause(5000)
     }
 
     /**
      * Connect ThingSpeak IoT TCP server
-     * (if you have trouble connecting ThingSpeak, try ping api.thingspeak.com
-     * and use the IP instead)
     */
     //% weight=98
-    //% blockId="TCP_connect" block="Connect ThingSpeak IP %ip"
+    //% blockId="TCP_connect" block="Connect ThingSpeak URL or IP %ip"
     //% ip.defl=api.thingspeak.com
     export function connectthingspeak(ip: string): void {
         let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
         serial.writeString(text + "\u000D" + "\u000A")
-        basic.pause(6000)
+        URL = ip
+        basic.pause(5000)
     }
 
     /**
@@ -74,7 +76,7 @@ namespace ESP8266_IoT {
         n7: number,
         n8: number): void {
         let text = ""
-        text = "GET /update?key="
+        text = "GET https://" + URL + "/update?api_key="
             + write_api_key
             + "&field1="
             + n1
@@ -105,9 +107,9 @@ namespace ESP8266_IoT {
         text = "AT+CIPSEND="
             + (tobesendstring.length + 2)
         serial.writeString(text + "\u000D" + "\u000A")
-        basic.pause(3000)
+        basic.pause(1000)
         serial.writeString(tobesendstring + "\u000D" + "\u000A")
-        basic.pause(6000)
+        basic.pause(15000)
     }
 
 }
