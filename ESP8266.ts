@@ -27,9 +27,9 @@ namespace ESP8266_IoT {
         )
         basic.pause(10)
         serial.writeString("AT+CWMODE=1" + "\u000D" + "\u000A")
-        basic.pause(2000)
+        basic.pause(5000)
         serial.writeString("AT+RST" + "\u000D" + "\u000A")
-        basic.pause(2000)
+        basic.pause(5000)
     }
 
     /**
@@ -44,7 +44,7 @@ namespace ESP8266_IoT {
             + key
             + "\""
         serial.writeString(text + "\u000D" + "\u000A")
-        basic.pause(2000)
+        basic.pause(5000)
     }
 
     /**
@@ -57,7 +57,7 @@ namespace ESP8266_IoT {
         let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
         serial.writeString(text + "\u000D" + "\u000A")
         URL = ip
-        basic.pause(2000)
+        basic.pause(5000)
     }
 
     /**
@@ -76,7 +76,7 @@ namespace ESP8266_IoT {
         n7: number,
         n8: number): void {
         let text = ""
-        text = "GET https://" + URL + "/update?api_key="
+        text = "GET /update?api_key="
             + write_api_key
             + "&field1="
             + n1
@@ -107,9 +107,9 @@ namespace ESP8266_IoT {
         text = "AT+CIPSEND="
             + (tobesendstring.length + 2)
         serial.writeString(text + "\u000D" + "\u000A")
-        basic.pause(1000)
+        basic.pause(2000)
         serial.writeString(tobesendstring + "\u000D" + "\u000A")
-        basic.pause(4000)
+        basic.pause(8000)
     }
 
 }
