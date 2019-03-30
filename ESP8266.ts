@@ -1,6 +1,6 @@
 /**
- * MakeCode extension for ESP8266 and ThinkSpeak website, modified from elecfreaks/pxt-esp8266iot
- * https://thingspeak.com/
+ * MakeCode extension for ESP8266 and Server website, modified from alankrantas/pxt-esp8266iot
+ * https://hamster.kvreslab.ru/
  */
 //% color=#0fbc11 icon="\uf1eb" weight=90
 namespace ESP8266_HAMSTER {
