@@ -3,10 +3,10 @@
  * https://thingspeak.com/
  */
 //% color=#0fbc11 icon="\uf1eb" weight=90
-namespace ESP8266_IoT {
+namespace ESP8266_HAMSTER {
 
     let tobesendstring = ""
-    let URL = "api.thingspeak.com"
+    let URL = "hamster.kvreslab.ru"
     let time = 0
 
     /**
