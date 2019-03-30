@@ -51,7 +51,7 @@ namespace ESP8266_HAMSTER {
      * Connect ThingSpeak IoT TCP server
     */
     //% weight=98
-    //% blockId="TCP_connect" block="Connect ThingSpeak URL or IP %ip"
+    //% blockId="TCP_connect" block="Connect Server URL or IP %ip"
     //% ip.defl=hamster.kvreslab.ru
     export function connectthingspeak(ip: string): void {
         let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
@@ -65,35 +65,23 @@ namespace ESP8266_HAMSTER {
      * (Get your write API Key on your ThingSpeak channel)
      */
     //% weight=97
-    //% blockId="send_text" block="Set data to be send | write API Key = %write_api_key|Field 1 = %n1|Field 2 = %n2|Field 3 = %n3|Field 4 = %n4|Field 5 = %n5|Field 6 = %n6|Field 7 = %n7|Field 8 = %n8"
+    //% blockId="send_text" block="Set data to be send | write API Key = %write_api_key|Sensor 1 = %n1|Sensor 2 = %n2|Sensor 3 = %n3|Sensor 4 = %n4"
     export function tosendtext(write_api_key: string,
         n1: number,
         n2: number,
         n3: number,
-        n4: number,
-        n5: number,
-        n6: number,
-        n7: number,
-        n8: number): void {
+        n4: number): void {
         let text = ""
-        text = "GET /update?api_key="
+        text = "GET /rdata.php?api_key="
             + write_api_key
-            + "&field1="
+            + "&sensor1="
             + n1
-            + "&field2="
+            + "&sensor2="
             + n2
-            + "&field3="
+            + "&sensor3="
             + n3
-            + "&field4="
+            + "&sensor4="
             + n4
-            + "&field5="
-            + n5
-            + "&field6="
-            + n6
-            + "&field7="
-            + n7
-            + "&field8="
-            + n8
         tobesendstring = text
     }
 
@@ -101,7 +89,7 @@ namespace ESP8266_HAMSTER {
      * Send data to ThingSpeak
      */
     //% weight=96
-    //% blockId=senddata block="Send data to ThingSpeak"
+    //% blockId=senddata block="Send data to Server"
     export function senddata(): void {
         let text = ""
         text = "AT+CIPSEND="
