@@ -72,7 +72,7 @@ namespace ESP8266_HAMSTER {
         n3: number,
         n4: number): void {
         let text = ""
-        text = "GET /rdata.php?api_key="
+        text = "GET /dresive.php?api_key="
             + write_api_key
             + "&sensor1="
             + n1
