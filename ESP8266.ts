@@ -52,7 +52,7 @@ namespace ESP8266_HAMSTER {
     */
     //% weight=98
     //% blockId="TCP_connect" block="Connect ThingSpeak URL or IP %ip"
-    //% ip.defl=api.thingspeak.com
+    //% ip.defl=hamster.kvreslab.ru
     export function connectthingspeak(ip: string): void {
         let text = "AT+CIPSTART=\"TCP\",\"" + ip + "\",80"
         serial.writeString(text + "\u000D" + "\u000A")
